@@ -9,6 +9,28 @@
     {{ $centro->lancamentos()->count() }}
      itens
 </h2>
+<p class="fs-4">
+    Total Entradas: R$
+    {{
+        $centro->lancamentos()
+        ->where('id_tipo', 1)
+        ->sum('valor')
+    }}
+    <br>
+    Total Saidas: R$
+    {{
+        $centro->lancamentos()
+        ->where('id_tipo', 2)
+        ->sum('valor')*-1
+    }}
+    <br>
+    Saldo: R$
+    {{
+        $centro->lancamentos()->where('id_tipo', 1)->sum('valor')
+        -
+        $centro->lancamentos()->where('id_tipo', 2)->sum('valor')
+    }}
+</p>
 <div class="table-responsive">
     <table class="table table-striped  table-hover ">
         <thead>
@@ -17,6 +39,7 @@
                 <th class="col-md-1">#</th>
                 <th class="col-md-1">ID</th>
                 <th>Tipo</th>
+                <th>Usuário</th>
                 <th>Descrição</th>
                 <th>Valor</th>
             </tr>
@@ -27,6 +50,7 @@
                 <td scope="row">{{ $loop->iteration }}</td>
                 <td scope="row">{{ $lancamento->id_lancamento }}</td>
                 <td>{{ $lancamento->tipo->tipo }}</td>
+                <td>{!! $lancamento->usuario->name !!} </td>
                 <td>{{ $lancamento->descricao }}</td>
                 <td>{{ $lancamento->valor }}</td>
             </tr>
